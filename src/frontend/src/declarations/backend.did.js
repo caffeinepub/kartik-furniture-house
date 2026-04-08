@@ -22,6 +22,36 @@ export const Enquiry = IDL.Record({
   'phone' : IDL.Text,
 });
 export const UserProfile = IDL.Record({ 'name' : IDL.Text });
+export const DesignRequest = IDL.Record({
+  'status' : IDL.Text,
+  'imageURLs' : IDL.Vec(IDL.Text),
+  'furnitureType' : IDL.Text,
+  'city' : IDL.Text,
+  'name' : IDL.Text,
+  'color' : IDL.Text,
+  'description' : IDL.Text,
+  'dimensionLength' : IDL.Text,
+  'timestamp' : IDL.Int,
+  'dimensionWidth' : IDL.Text,
+  'phone' : IDL.Text,
+  'budget' : IDL.Text,
+  'dimensionHeight' : IDL.Text,
+  'material' : IDL.Text,
+});
+export const DesignRequestSubmission = IDL.Record({
+  'imageURLs' : IDL.Vec(IDL.Text),
+  'furnitureType' : IDL.Text,
+  'city' : IDL.Text,
+  'name' : IDL.Text,
+  'color' : IDL.Text,
+  'description' : IDL.Text,
+  'dimensionLength' : IDL.Text,
+  'dimensionWidth' : IDL.Text,
+  'phone' : IDL.Text,
+  'budget' : IDL.Text,
+  'dimensionHeight' : IDL.Text,
+  'material' : IDL.Text,
+});
 export const EnquirySubmission = IDL.Record({
   'service' : IDL.Text,
   'city' : IDL.Text,
@@ -29,14 +59,36 @@ export const EnquirySubmission = IDL.Record({
   'message' : IDL.Text,
   'phone' : IDL.Text,
 });
+export const http_header = IDL.Record({
+  'value' : IDL.Text,
+  'name' : IDL.Text,
+});
+export const http_request_result = IDL.Record({
+  'status' : IDL.Nat,
+  'body' : IDL.Vec(IDL.Nat8),
+  'headers' : IDL.Vec(http_header),
+});
+export const TransformationInput = IDL.Record({
+  'context' : IDL.Vec(IDL.Nat8),
+  'response' : http_request_result,
+});
+export const TransformationOutput = IDL.Record({
+  'status' : IDL.Nat,
+  'body' : IDL.Vec(IDL.Nat8),
+  'headers' : IDL.Vec(http_header),
+});
 
 export const idlService = IDL.Service({
-  '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  '_initializeAccessControl' : IDL.Func([], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'chatWithAI' : IDL.Func([IDL.Text], [IDL.Text], []),
+  'deleteDesignRequest' : IDL.Func([IDL.Int], [], []),
   'deleteEnquiry' : IDL.Func([IDL.Int], [], []),
   'getAllEnquiries' : IDL.Func([], [IDL.Vec(Enquiry)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getChatbotSystemInfo' : IDL.Func([], [IDL.Text], ['query']),
+  'getDesignRequests' : IDL.Func([], [IDL.Vec(DesignRequest)], ['query']),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
       [IDL.Opt(UserProfile)],
@@ -44,7 +96,14 @@ export const idlService = IDL.Service({
     ),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+  'submitDesignRequest' : IDL.Func([DesignRequestSubmission], [IDL.Int], []),
   'submitEnquiry' : IDL.Func([EnquirySubmission], [IDL.Int], []),
+  'transformChatResponse' : IDL.Func(
+      [TransformationInput],
+      [TransformationOutput],
+      ['query'],
+    ),
+  'updateDesignRequestStatus' : IDL.Func([IDL.Int, IDL.Text], [], []),
 });
 
 export const idlInitArgs = [];
@@ -64,6 +123,36 @@ export const idlFactory = ({ IDL }) => {
     'phone' : IDL.Text,
   });
   const UserProfile = IDL.Record({ 'name' : IDL.Text });
+  const DesignRequest = IDL.Record({
+    'status' : IDL.Text,
+    'imageURLs' : IDL.Vec(IDL.Text),
+    'furnitureType' : IDL.Text,
+    'city' : IDL.Text,
+    'name' : IDL.Text,
+    'color' : IDL.Text,
+    'description' : IDL.Text,
+    'dimensionLength' : IDL.Text,
+    'timestamp' : IDL.Int,
+    'dimensionWidth' : IDL.Text,
+    'phone' : IDL.Text,
+    'budget' : IDL.Text,
+    'dimensionHeight' : IDL.Text,
+    'material' : IDL.Text,
+  });
+  const DesignRequestSubmission = IDL.Record({
+    'imageURLs' : IDL.Vec(IDL.Text),
+    'furnitureType' : IDL.Text,
+    'city' : IDL.Text,
+    'name' : IDL.Text,
+    'color' : IDL.Text,
+    'description' : IDL.Text,
+    'dimensionLength' : IDL.Text,
+    'dimensionWidth' : IDL.Text,
+    'phone' : IDL.Text,
+    'budget' : IDL.Text,
+    'dimensionHeight' : IDL.Text,
+    'material' : IDL.Text,
+  });
   const EnquirySubmission = IDL.Record({
     'service' : IDL.Text,
     'city' : IDL.Text,
@@ -71,14 +160,33 @@ export const idlFactory = ({ IDL }) => {
     'message' : IDL.Text,
     'phone' : IDL.Text,
   });
+  const http_header = IDL.Record({ 'value' : IDL.Text, 'name' : IDL.Text });
+  const http_request_result = IDL.Record({
+    'status' : IDL.Nat,
+    'body' : IDL.Vec(IDL.Nat8),
+    'headers' : IDL.Vec(http_header),
+  });
+  const TransformationInput = IDL.Record({
+    'context' : IDL.Vec(IDL.Nat8),
+    'response' : http_request_result,
+  });
+  const TransformationOutput = IDL.Record({
+    'status' : IDL.Nat,
+    'body' : IDL.Vec(IDL.Nat8),
+    'headers' : IDL.Vec(http_header),
+  });
   
   return IDL.Service({
-    '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    '_initializeAccessControl' : IDL.Func([], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'chatWithAI' : IDL.Func([IDL.Text], [IDL.Text], []),
+    'deleteDesignRequest' : IDL.Func([IDL.Int], [], []),
     'deleteEnquiry' : IDL.Func([IDL.Int], [], []),
     'getAllEnquiries' : IDL.Func([], [IDL.Vec(Enquiry)], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getChatbotSystemInfo' : IDL.Func([], [IDL.Text], ['query']),
+    'getDesignRequests' : IDL.Func([], [IDL.Vec(DesignRequest)], ['query']),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserProfile)],
@@ -86,7 +194,14 @@ export const idlFactory = ({ IDL }) => {
       ),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+    'submitDesignRequest' : IDL.Func([DesignRequestSubmission], [IDL.Int], []),
     'submitEnquiry' : IDL.Func([EnquirySubmission], [IDL.Int], []),
+    'transformChatResponse' : IDL.Func(
+        [TransformationInput],
+        [TransformationOutput],
+        ['query'],
+      ),
+    'updateDesignRequestStatus' : IDL.Func([IDL.Int, IDL.Text], [], []),
   });
 };
 

@@ -7,6 +7,50 @@ export interface None {
     __kind__: "None";
 }
 export type Option<T> = Some<T> | None;
+export interface http_request_result {
+    status: bigint;
+    body: Uint8Array;
+    headers: Array<http_header>;
+}
+export interface TransformationOutput {
+    status: bigint;
+    body: Uint8Array;
+    headers: Array<http_header>;
+}
+export interface TransformationInput {
+    context: Uint8Array;
+    response: http_request_result;
+}
+export interface DesignRequestSubmission {
+    imageURLs: Array<string>;
+    furnitureType: string;
+    city: string;
+    name: string;
+    color: string;
+    description: string;
+    dimensionLength: string;
+    dimensionWidth: string;
+    phone: string;
+    budget: string;
+    dimensionHeight: string;
+    material: string;
+}
+export interface DesignRequest {
+    status: string;
+    imageURLs: Array<string>;
+    furnitureType: string;
+    city: string;
+    name: string;
+    color: string;
+    description: string;
+    dimensionLength: string;
+    timestamp: bigint;
+    dimensionWidth: string;
+    phone: string;
+    budget: string;
+    dimensionHeight: string;
+    material: string;
+}
 export interface EnquirySubmission {
     service: string;
     city: string;
@@ -22,37 +66,11 @@ export interface Enquiry {
     timestamp: bigint;
     phone: string;
 }
-export interface DesignRequestSubmission {
-    name: string;
-    phone: string;
-    city: string;
-    furnitureType: string;
-    dimensionLength: string;
-    dimensionWidth: string;
-    dimensionHeight: string;
-    material: string;
-    color: string;
-    budget: string;
-    description: string;
-    imageURLs: string[];
-}
-export interface DesignRequest {
-    name: string;
-    phone: string;
-    city: string;
-    furnitureType: string;
-    dimensionLength: string;
-    dimensionWidth: string;
-    dimensionHeight: string;
-    material: string;
-    color: string;
-    budget: string;
-    description: string;
-    imageURLs: string[];
-    timestamp: bigint;
-    status: string;
-}
 export interface UserProfile {
+    name: string;
+}
+export interface http_header {
+    value: string;
     name: string;
 }
 export enum UserRole {
@@ -62,16 +80,19 @@ export enum UserRole {
 }
 export interface backendInterface {
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    chatWithAI(userMessage: string): Promise<string>;
+    deleteDesignRequest(id: bigint): Promise<void>;
     deleteEnquiry(id: bigint): Promise<void>;
     getAllEnquiries(): Promise<Array<Enquiry>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
+    getChatbotSystemInfo(): Promise<string>;
+    getDesignRequests(): Promise<Array<DesignRequest>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     isCallerAdmin(): Promise<boolean>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
-    submitEnquiry(submission: EnquirySubmission): Promise<bigint>;
     submitDesignRequest(submission: DesignRequestSubmission): Promise<bigint>;
-    getDesignRequests(): Promise<Array<DesignRequest>>;
+    submitEnquiry(submission: EnquirySubmission): Promise<bigint>;
+    transformChatResponse(input: TransformationInput): Promise<TransformationOutput>;
     updateDesignRequestStatus(id: bigint, status: string): Promise<void>;
-    deleteDesignRequest(id: bigint): Promise<void>;
 }

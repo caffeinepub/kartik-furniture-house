@@ -10,6 +10,36 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface DesignRequest {
+  'status' : string,
+  'imageURLs' : Array<string>,
+  'furnitureType' : string,
+  'city' : string,
+  'name' : string,
+  'color' : string,
+  'description' : string,
+  'dimensionLength' : string,
+  'timestamp' : bigint,
+  'dimensionWidth' : string,
+  'phone' : string,
+  'budget' : string,
+  'dimensionHeight' : string,
+  'material' : string,
+}
+export interface DesignRequestSubmission {
+  'imageURLs' : Array<string>,
+  'furnitureType' : string,
+  'city' : string,
+  'name' : string,
+  'color' : string,
+  'description' : string,
+  'dimensionLength' : string,
+  'dimensionWidth' : string,
+  'phone' : string,
+  'budget' : string,
+  'dimensionHeight' : string,
+  'material' : string,
+}
 export interface Enquiry {
   'service' : string,
   'city' : string,
@@ -25,21 +55,46 @@ export interface EnquirySubmission {
   'message' : string,
   'phone' : string,
 }
+export interface TransformationInput {
+  'context' : Uint8Array,
+  'response' : http_request_result,
+}
+export interface TransformationOutput {
+  'status' : bigint,
+  'body' : Uint8Array,
+  'headers' : Array<http_header>,
+}
 export interface UserProfile { 'name' : string }
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
   { 'guest' : null };
+export interface http_header { 'value' : string, 'name' : string }
+export interface http_request_result {
+  'status' : bigint,
+  'body' : Uint8Array,
+  'headers' : Array<http_header>,
+}
 export interface _SERVICE {
-  '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  '_initializeAccessControl' : ActorMethod<[], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'chatWithAI' : ActorMethod<[string], string>,
+  'deleteDesignRequest' : ActorMethod<[bigint], undefined>,
   'deleteEnquiry' : ActorMethod<[bigint], undefined>,
   'getAllEnquiries' : ActorMethod<[], Array<Enquiry>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getChatbotSystemInfo' : ActorMethod<[], string>,
+  'getDesignRequests' : ActorMethod<[], Array<DesignRequest>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
+  'submitDesignRequest' : ActorMethod<[DesignRequestSubmission], bigint>,
   'submitEnquiry' : ActorMethod<[EnquirySubmission], bigint>,
+  'transformChatResponse' : ActorMethod<
+    [TransformationInput],
+    TransformationOutput
+  >,
+  'updateDesignRequestStatus' : ActorMethod<[bigint, string], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

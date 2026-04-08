@@ -1,0 +1,98 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserProfile = record {name: text;};
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type EnquirySubmission = 
+ record {
+   city: text;
+   message: text;
+   name: text;
+   phone: text;
+   "service": text;
+ };
+type Enquiry = 
+ record {
+   city: text;
+   message: text;
+   name: text;
+   phone: text;
+   "service": text;
+   timestamp: int;
+ };
+type DesignRequestSubmission = 
+ record {
+   budget: text;
+   city: text;
+   color: text;
+   description: text;
+   dimensionHeight: text;
+   dimensionLength: text;
+   dimensionWidth: text;
+   furnitureType: text;
+   imageURLs: vec text;
+   material: text;
+   name: text;
+   phone: text;
+ };
+type DesignRequest = 
+ record {
+   budget: text;
+   city: text;
+   color: text;
+   description: text;
+   dimensionHeight: text;
+   dimensionLength: text;
+   dimensionWidth: text;
+   furnitureType: text;
+   imageURLs: vec text;
+   material: text;
+   name: text;
+   phone: text;
+   status: text;
+   timestamp: int;
+ };
+service : {
+  _initializeAccessControl: () -> ();
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  chatWithAI: (userMessage: text) -> (text);
+  deleteDesignRequest: (id: int) -> ();
+  deleteEnquiry: (id: int) -> ();
+  getAllEnquiries: () -> (vec Enquiry) query;
+  getCallerUserProfile: () -> (opt UserProfile) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getChatbotSystemInfo: () -> (text) query;
+  getDesignRequests: () -> (vec DesignRequest) query;
+  getUserProfile: (user: principal) -> (opt UserProfile) query;
+  isCallerAdmin: () -> (bool) query;
+  saveCallerUserProfile: (profile: UserProfile) -> ();
+  submitDesignRequest: (submission: DesignRequestSubmission) -> (int);
+  submitEnquiry: (submission: EnquirySubmission) -> (int);
+  transformChatResponse: (input: TransformationInput) ->
+   (TransformationOutput) query;
+  updateDesignRequestStatus: (id: int, status: text) -> ();
+}

@@ -1,0 +1,68 @@
+// Version: 1.0.0
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type DesignRequest__75148348 =
+  {
+    budget : Text;
+    city : Text;
+    color : Text;
+    description : Text;
+    dimensionHeight : Text;
+    dimensionLength : Text;
+    dimensionWidth : Text;
+    furnitureType : Text;
+    imageURLs : [Text];
+    material : Text;
+    name : Text;
+    phone : Text;
+    status : Text;
+    timestamp : Int
+  };
+type Enquiry__415520819 =
+  {
+    city : Text;
+    message : Text;
+    name : Text;
+    phone : Text;
+    service : Text;
+    timestamp : Int
+  };
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type UserProfile__491224006 = {name : Text};
+type UserRole__1054455867 = {#admin; #guest; #user};
+actor {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__605269027<Principal, UserRole__1054455867>
+    };
+  stable designRequestsStore :
+    {
+      var root : Node__46230540<Int, DesignRequest__75148348>;
+      var size : Nat__490723111
+    };
+  stable enquiriesStore :
+    {
+      var root : Node__46230540<Int, Enquiry__415520819>;
+      var size : Nat__490723111
+    };
+  stable fallbackMessage : Text;
+  stable nvidiaApiKey : Text;
+  stable nvidiaApiUrl : Text;
+  stable systemPrompt : Text;
+  stable userProfiles :
+    {
+      var root : Node__46230540<Principal, UserProfile__491224006>;
+      var size : Nat__490723111
+    }
+};

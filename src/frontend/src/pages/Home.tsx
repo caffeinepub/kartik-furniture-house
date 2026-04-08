@@ -1,14 +1,10 @@
-import { HttpAgent } from "@icp-sdk/core/agent";
-import { useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
-import { loadConfig } from "../config";
-import { useActor } from "../hooks/useActor";
-import { StorageClient } from "../utils/StorageClient";
+import { useEffect, useState } from "react";
+import AIChatbot from "../components/AIChatbot";
 
 const WHATSAPP_NUMBER = "919799341917";
 const PHONE_NUMBER = "+91 97993 41917";
 const PHONE_TEL = "tel:+919799341917";
-const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}`;
+const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=Hi%20Kartik%20Furniture%20%F0%9F%91%8B%20%0AMujhe%20custom%20furniture%20banwana%20hai.%0ADetails%3A%0A-%20Type%3A%0A-%20Size%3A%0A-%20Location%3A%0A%0APhoto%20bhej%20raha%20hoon.`;
 const ADDRESS = "C4G2+CRQ, Muriya Road, Jatav Mohalla, Nagar, Rajasthan 321205";
 const MAPS_LINK = "https://maps.app.goo.gl/GkRSqipfmUvBBMsi6";
 const EMAIL = "rajumundiya5@gmail.com";
@@ -187,86 +183,90 @@ const GALLERY_CATEGORIES = [
   "Custom Work",
 ];
 
-const GALLERY_ITEMS = [
+const GALLERY_ITEMS: GalleryItem[] = [
   {
     id: 1,
-    category: "Bed",
-    customerName: "Ramesh Sharma",
-    location: "Bharatpur",
-    hasBeforeAfter: false,
-  },
-  {
-    id: 2,
-    category: "Bed",
-    customerName: "Sunita Devi",
-    location: "Nagar",
-    hasBeforeAfter: true,
-  },
-  {
-    id: 3,
-    category: "Sofa",
-    customerName: "Imran Khan",
-    location: "Deeg",
-    hasBeforeAfter: false,
-  },
-  {
-    id: 4,
-    category: "Sofa",
-    customerName: "Vijay Agarwal",
-    location: "Delhi NCR",
-    hasBeforeAfter: true,
-  },
-  {
-    id: 5,
-    category: "Table",
-    customerName: "Priya Meena",
-    location: "Bharatpur",
-    hasBeforeAfter: false,
-  },
-  {
-    id: 6,
-    category: "Table",
-    customerName: "Arjun Singh",
-    location: "Nagar",
-    hasBeforeAfter: true,
-  },
-  {
-    id: 7,
-    category: "Chair",
-    customerName: "Meena Devi",
-    location: "Deeg",
-    hasBeforeAfter: false,
-  },
-  {
-    id: 8,
     category: "Door",
     customerName: "Rakesh Kumar",
     location: "Bharatpur",
-    hasBeforeAfter: true,
+    image:
+      "/assets/img-20260331-wa0012-019d4c11-e38d-77dc-b952-ffbf7637e6d6.jpg",
+    imageAfter:
+      "/assets/img-20260331-wa0009-019d4c11-e378-758d-8183-f4baaed2b09e.jpg",
   },
   {
-    id: 9,
+    id: 2,
     category: "Door",
     customerName: "Kavita Sharma",
     location: "Nagar",
-    hasBeforeAfter: false,
+    image:
+      "/assets/img-20260331-wa0016-019d4c11-e3cb-730f-b86c-0cb898e02067.jpg",
   },
   {
-    id: 10,
+    id: 3,
+    category: "Door",
+    customerName: "Mohan Lal",
+    location: "Deeg",
+    image:
+      "/assets/img-20260331-wa0004-019d4c11-e3fe-74a9-bea3-2405c06e9dcd.jpg",
+    imageAfter:
+      "/assets/img-20260331-wa0003-019d4c11-e4ad-7328-bd0f-ff3eb22764bf.jpg",
+  },
+  {
+    id: 4,
+    category: "Door",
+    customerName: "Sunita Devi",
+    location: "Bharatpur",
+    image:
+      "/assets/img-20260331-wa0008-019d4c11-e616-725b-9aa4-980531ef9c7a.jpg",
+  },
+  {
+    id: 5,
     category: "Custom Work",
     customerName: "Suresh Yadav",
     location: "Delhi NCR",
-    hasBeforeAfter: true,
+    image:
+      "/assets/img-20260331-wa0015-019d4c11-e67f-73cc-b8fc-77f19b73bb5e.jpg",
+    imageAfter:
+      "/assets/img-20260330-wa0004-019d4c11-e611-70b9-a070-b526a499be75.jpg",
   },
   {
-    id: 11,
+    id: 6,
     category: "Custom Work",
     customerName: "Geeta Bai",
     location: "Bharatpur",
-    hasBeforeAfter: false,
+    image:
+      "/assets/img-20260331-wa0011-019d4c11-e68c-7140-be2f-18b54fa00537.jpg",
+  },
+  {
+    id: 7,
+    category: "Custom Work",
+    customerName: "Arjun Singh",
+    location: "Nagar",
+    image:
+      "/assets/img-20260330-wa0007-019d4c11-e62c-7300-8853-2d3416f49bbb.jpg",
+    imageAfter:
+      "/assets/img-20260331-wa0006-019d4c11-e70a-75ec-b32c-b970d360ef09.jpg",
+  },
+  {
+    id: 8,
+    category: "Custom Work",
+    customerName: "Vijay Agarwal",
+    location: "Delhi NCR",
+    image:
+      "/assets/img-20260331-wa0010-019d4c11-e70a-73da-b057-4510faa636d0.jpg",
+  },
+  {
+    id: 9,
+    category: "Bed",
+    customerName: "Ramesh Sharma",
+    location: "Bharatpur",
+    image:
+      "/assets/img-20260331-wa0005-019d4c11-e808-7658-8e06-4f9f8db8d94f.jpg",
+    imageAfter:
+      "/assets/img-20260331-wa0007-019d4c11-e885-740f-a0d5-34dcdb04a718.jpg",
   },
 ];
-
 // ── How It Works ─────────────────────────────────────────────────────────────
 
 function HowItWorksSection() {
@@ -366,7 +366,8 @@ interface GalleryItem {
   category: string;
   customerName: string;
   location: string;
-  hasBeforeAfter: boolean;
+  image: string;
+  imageAfter?: string;
 }
 
 function GalleryCard({ item }: { item: GalleryItem }) {
@@ -374,8 +375,14 @@ function GalleryCard({ item }: { item: GalleryItem }) {
 
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group">
-      {/* Placeholder image area */}
-      <div className="relative aspect-[4/3] bg-stone-200 flex items-center justify-center">
+      {/* Image area */}
+      <div className="relative aspect-[4/3] bg-amber-100 overflow-hidden">
+        <img
+          src={showAfter && item.imageAfter ? item.imageAfter : item.image}
+          alt={`${item.category} by ${item.customerName}`}
+          className="w-full h-full object-cover absolute inset-0 transition-opacity duration-300"
+          loading="lazy"
+        />
         {/* Real Work Done badge */}
         <div className="absolute top-3 left-3 bg-green-500 text-white text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1 z-10">
           <span>✓</span>
@@ -386,7 +393,7 @@ function GalleryCard({ item }: { item: GalleryItem }) {
           {item.category}
         </div>
         {/* Before/After toggle */}
-        {item.hasBeforeAfter && (
+        {item.imageAfter && (
           <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 z-10">
             <button
               type="button"
@@ -404,17 +411,6 @@ function GalleryCard({ item }: { item: GalleryItem }) {
             </button>
           </div>
         )}
-        {/* Placeholder content */}
-        <div className="text-center text-stone-400">
-          <div className="text-5xl mb-2">📷</div>
-          <p className="text-sm font-medium">
-            {item.hasBeforeAfter
-              ? showAfter
-                ? "After Photo"
-                : "Before Photo"
-              : "Photo Coming Soon"}
-          </p>
-        </div>
       </div>
       {/* Customer info */}
       <div className="p-4">
@@ -502,52 +498,6 @@ function GallerySection() {
   );
 }
 
-// ── Design Wizard constants ──────────────────────────────────────────────────
-
-interface WizardImageItem {
-  file: File;
-  preview: string;
-  url: string | null;
-  loading: boolean;
-  error: boolean;
-}
-
-const WIZARD_STEPS = ["Your Details", "Furniture Info", "Description & Photos"];
-
-interface DesignRequestSubmission {
-  name: string;
-  phone: string;
-  city: string;
-  furnitureType: string;
-  dimensionLength: string;
-  dimensionWidth: string;
-  dimensionHeight: string;
-  material: string;
-  color: string;
-  budget: string;
-  description: string;
-  imageURLs: string[];
-}
-
-interface DesignActorBridge {
-  submitDesignRequest(s: DesignRequestSubmission): Promise<bigint>;
-}
-
-async function uploadImageToStorage(file: File): Promise<string> {
-  const config = await loadConfig();
-  const agent = new HttpAgent({ host: config.backend_host });
-  const storageClient = new StorageClient(
-    config.bucket_name,
-    config.storage_gateway_url,
-    config.backend_canister_id,
-    config.project_id,
-    agent,
-  );
-  const bytes = new Uint8Array(await file.arrayBuffer());
-  const { hash } = await storageClient.putFile(bytes);
-  return await storageClient.getDirectURL(hash);
-}
-
 // ── Star Rating ──────────────────────────────────────────────────────────────
 
 function StarRating({ count }: { count: number }) {
@@ -630,13 +580,6 @@ function Navbar() {
                   {link.label}
                 </a>
               ))}
-              <a
-                href="#enquiry"
-                className="bg-gold text-brown-deep text-sm font-bold px-5 py-2 rounded-full hover:bg-gold-dark transition-colors"
-                data-ocid="nav.get_quote.button"
-              >
-                Get Quote
-              </a>
             </nav>
 
             {/* Hamburger */}
@@ -693,19 +636,6 @@ function Navbar() {
                   {link.label}
                 </a>
               ))}
-              <button
-                type="button"
-                onClick={() => {
-                  closeMenu();
-                  document
-                    .getElementById("enquiry")
-                    ?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="block mt-2 w-full bg-gold text-brown-deep text-center font-bold px-5 py-3 rounded-full"
-                data-ocid="nav.mobile_get_quote.button"
-              >
-                Get Free Quote
-              </button>
             </nav>
           )}
         </div>
@@ -754,7 +684,7 @@ function HeroSection() {
 
         <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center mb-12">
           <a
-            href="#enquiry"
+            href="#contact"
             data-ocid="hero.get_quote.button"
             className="inline-flex items-center justify-center gap-2 bg-gold text-brown-deep font-bold text-lg px-8 py-4 rounded-full hover:bg-gold-dark hover:scale-105 transition-all shadow-xl"
           >
@@ -777,8 +707,8 @@ function HeroSection() {
           {[
             { icon: "😊", text: "500+ Happy Customers" },
             { icon: "⭐", text: "5+ Years Experience" },
-            { icon: "✂️", text: "Custom Orders Available" },
-            { icon: "🏭", text: "Direct Factory Price" },
+            { icon: "🏭", text: "Direct Manufacturer" },
+            { icon: "💰", text: "Best Price Guarantee" },
           ].map((badge) => (
             <div
               key={badge.text}
@@ -866,7 +796,7 @@ function AboutSection() {
             </div>
           </div>
 
-          {/* Image */}
+          {/* Founder Card */}
           <div className="relative">
             <div className="rounded-2xl overflow-hidden shadow-2xl">
               <img
@@ -880,6 +810,31 @@ function AboutSection() {
               <div className="text-3xl font-bold">5+</div>
               <div className="text-xs uppercase tracking-wider">
                 Years of Trust
+              </div>
+            </div>
+            {/* Founder Badge */}
+            <div className="absolute -bottom-4 right-0 bg-white border border-gold/30 shadow-xl rounded-2xl px-5 py-4 flex items-center gap-3 min-w-[220px]">
+              <img
+                src="/assets/generated/founder-raju.dim_400x400.jpg"
+                alt="Raju – Founder, Kartik Furniture House"
+                className="w-14 h-14 rounded-full object-cover border-2 border-gold shadow-md flex-shrink-0"
+              />
+              <div>
+                <div className="text-brown-deep font-heading font-bold text-base leading-tight">
+                  Raju (Mundia Wale)
+                </div>
+                <div className="text-brown-mid text-xs mt-1 font-medium">
+                  20+ saal ka experience
+                </div>
+                <div className="text-brown-mid text-xs mt-0.5 italic">
+                  Master craftsman, Nagar ke jaane-maane furniture maker
+                </div>
+                <div className="text-gold text-xs font-semibold mt-1">
+                  Founder &amp; Master Craftsman
+                </div>
+                <div className="text-brown-mid text-xs mt-0.5">
+                  Nagar, Bharatpur
+                </div>
               </div>
             </div>
           </div>
@@ -997,7 +952,7 @@ function ProductsSection() {
                   </span>
                 </div>
                 <a
-                  href={`${WHATSAPP_LINK}?text=${encodeURIComponent(`Hello, I am interested in ${product.name}. Please share price and details.`)}`}
+                  href={`https://wa.me/919799341917?text=${encodeURIComponent(`Hello, I am interested in ${product.name}. Please share price and details.`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full text-center font-bold text-sm py-3 rounded-full text-white transition-opacity hover:opacity-90"
@@ -1013,7 +968,7 @@ function ProductsSection() {
 
         <div className="text-center mt-10">
           <a
-            href="#enquiry"
+            href="#contact"
             className="inline-flex items-center gap-2 bg-brown-deep text-cream font-bold px-8 py-4 rounded-full hover:bg-brown-mid transition-colors shadow-lg"
             data-ocid="products.get_quote.button"
           >
@@ -1125,690 +1080,106 @@ function BlogSection() {
 // ── Design Wizard Section ────────────────────────────────────────────────────
 
 function DesignWizardSection() {
-  const { actor } = useActor();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const [step, setStep] = useState(1);
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [city, setCity] = useState("");
-  const [furnitureType, setFurnitureType] = useState("Bed");
-  const [budget, setBudget] = useState("\u20b95,000 \u2013 \u20b910,000");
-  const [material, setMaterial] = useState("Sheesham Wood");
-  const [description, setDescription] = useState("");
-  const [images, setImages] = useState<WizardImageItem[]>([]);
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-
-  const inputClass =
-    "w-full border border-beige bg-white text-brown-deep placeholder-brown-mid/50 rounded-xl px-4 py-3 text-base focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors min-h-[48px]";
-  const selectClass =
-    "w-full border border-beige bg-white text-brown-deep rounded-xl px-4 py-3 text-base focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors min-h-[48px] appearance-none cursor-pointer";
-
-  const FURNITURE_TYPE_OPTIONS = ["Bed", "Sofa", "Table", "Repair", "Custom"];
-  const BUDGET_OPTIONS = [
-    "\u20b95,000 \u2013 \u20b910,000",
-    "\u20b910,000 \u2013 \u20b925,000",
-    "\u20b925,000+",
-  ];
-  const MATERIAL_OPTIONS = ["Sheesham Wood", "Teak Wood", "Plywood", "Other"];
-
-  const validateStep1 = () => {
-    if (!name.trim()) {
-      toast.error("Please enter your full name.");
-      return false;
-    }
-    if (!/^[0-9]{10}$/.test(phone.trim())) {
-      toast.error("Please enter a valid 10-digit phone number.");
-      return false;
-    }
-    if (!city.trim()) {
-      toast.error("Please enter your city.");
-      return false;
-    }
-    return true;
-  };
-
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? []);
-    const newItems: WizardImageItem[] = files.map((file) => ({
-      file,
-      preview: URL.createObjectURL(file),
-      url: null,
-      loading: false,
-      error: false,
-    }));
-    setImages((prev) => [...prev, ...newItems]);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
-  const handleRemoveImage = (idx: number) => {
-    setImages((prev) => {
-      const updated = [...prev];
-      URL.revokeObjectURL(updated[idx].preview);
-      updated.splice(idx, 1);
-      return updated;
-    });
-  };
-
-  const handleSubmit = async () => {
-    if (!actor) {
-      toast.error("Connection not ready. Please try again.");
-      return;
-    }
-    setSubmitting(true);
-    try {
-      // Upload pending images
-      const uploadedImages = await Promise.all(
-        images.map(async (item) => {
-          if (item.url) return item.url;
-          try {
-            return await uploadImageToStorage(item.file);
-          } catch {
-            toast.error(`Failed to upload ${item.file.name}`);
-            return null;
-          }
-        }),
-      );
-      const imageURLs = uploadedImages.filter((u): u is string => u !== null);
-
-      await (actor as unknown as DesignActorBridge).submitDesignRequest({
-        name,
-        phone,
-        city,
-        furnitureType,
-        dimensionLength: "",
-        dimensionWidth: "",
-        dimensionHeight: "",
-        material,
-        color: "",
-        budget,
-        description,
-        imageURLs,
-      });
-
-      setShowSuccessModal(true);
-      setSubmitted(true);
-
-      // Auto-open WhatsApp after 1.5s
-      setTimeout(() => {
-        const msg = `Hi, I want to order custom furniture.
-
-Type: ${furnitureType}
-Material: ${material}
-Budget: ${budget}
-Name: ${name}
-City: ${city}
-Description: ${description}
-
-Please share price & delivery time.`;
-        window.open(
-          `https://wa.me/919799341917?text=${encodeURIComponent(msg)}`,
-          "_blank",
-        );
-      }, 1500);
-    } catch {
-      toast.error("Submission failed. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const renderStep1 = () => (
-    <div>
-      <h3 className="font-heading text-xl font-bold text-brown-deep mb-1">
-        Your Details
-      </h3>
-      <p className="text-brown-mid text-sm mb-6">
-        So we can send you a custom quote
-      </p>
-      <div className="space-y-4">
-        <div>
-          <label
-            htmlFor="wiz-name"
-            className="block text-sm font-semibold text-brown-deep mb-1.5"
-          >
-            Full Name <span className="text-red-500">*</span>
-          </label>
-          <input
-            id="wiz-name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Your Full Name"
-            required
-            className={inputClass}
-            data-ocid="design.name.input"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="wiz-phone"
-            className="block text-sm font-semibold text-brown-deep mb-1.5"
-          >
-            Phone Number <span className="text-red-500">*</span>
-          </label>
-          <input
-            id="wiz-phone"
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="10-digit mobile number"
-            pattern="[0-9]{10}"
-            title="Please enter a 10-digit phone number"
-            required
-            className={inputClass}
-            data-ocid="design.phone.input"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="wiz-city"
-            className="block text-sm font-semibold text-brown-deep mb-1.5"
-          >
-            City <span className="text-red-500">*</span>
-          </label>
-          <input
-            id="wiz-city"
-            type="text"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            placeholder="Your City (e.g. Bharatpur, Delhi)"
-            required
-            className={inputClass}
-            data-ocid="design.city.input"
-          />
-        </div>
-      </div>
-    </div>
+  const whatsappMsg = encodeURIComponent(
+    "Hi Kartik Furniture 👋\nMujhe custom furniture banwana hai.\n\nDetails:\n- Type: \n- Size: \n- Location: \n\nPhoto bhej raha hoon.",
   );
-
-  const renderStep2 = () => (
-    <div>
-      <h3 className="font-heading text-xl font-bold text-brown-deep mb-1">
-        Furniture Info
-      </h3>
-      <p className="text-brown-mid text-sm mb-6">Tell us what you need</p>
-      <div className="space-y-4">
-        <div>
-          <label
-            htmlFor="wiz-furniture"
-            className="block text-sm font-semibold text-brown-deep mb-1.5"
-          >
-            Furniture Type
-          </label>
-          <select
-            id="wiz-furniture"
-            value={furnitureType}
-            onChange={(e) => setFurnitureType(e.target.value)}
-            className={selectClass}
-            data-ocid="design.furniture_type.select"
-          >
-            {FURNITURE_TYPE_OPTIONS.map((f) => (
-              <option key={f} value={f}>
-                {f}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label
-            htmlFor="wiz-budget"
-            className="block text-sm font-semibold text-brown-deep mb-1.5"
-          >
-            Budget Range
-          </label>
-          <select
-            id="wiz-budget"
-            value={budget}
-            onChange={(e) => setBudget(e.target.value)}
-            className={selectClass}
-            data-ocid="design.budget.select"
-          >
-            {BUDGET_OPTIONS.map((b) => (
-              <option key={b} value={b}>
-                {b}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label
-            htmlFor="wiz-material"
-            className="block text-sm font-semibold text-brown-deep mb-1.5"
-          >
-            Material
-          </label>
-          <select
-            id="wiz-material"
-            value={material}
-            onChange={(e) => setMaterial(e.target.value)}
-            className={selectClass}
-            data-ocid="design.material.select"
-          >
-            {MATERIAL_OPTIONS.map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderStep3 = () => (
-    <div>
-      <h3 className="font-heading text-xl font-bold text-brown-deep mb-1">
-        Description &amp; Photos
-      </h3>
-      <p className="text-brown-mid text-sm mb-6">
-        Help us understand your exact requirement
-      </p>
-      <div className="space-y-4">
-        <div>
-          <label
-            htmlFor="wiz-desc"
-            className="block text-sm font-semibold text-brown-deep mb-1.5"
-          >
-            Description
-          </label>
-          <textarea
-            id="wiz-desc"
-            rows={4}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Describe what you need - size, color, usage..."
-            className={`${inputClass} resize-none`}
-            data-ocid="design.description.textarea"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="wiz-upload-trigger"
-            className="block text-sm font-semibold text-brown-deep mb-1.5"
-          >
-            Upload Reference Images{" "}
-            <span className="font-normal text-brown-mid/70">(optional)</span>
-          </label>
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={handleFileSelect}
-            className="hidden"
-            data-ocid="design.upload_button"
-          />
-          <button
-            id="wiz-upload-trigger"
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className="w-full border-2 border-dashed border-beige rounded-xl py-4 px-4 text-brown-mid hover:border-gold hover:text-brown-deep transition-colors flex items-center justify-center gap-2 text-sm font-medium"
-            data-ocid="design.dropzone"
-          >
-            <span className="text-xl">📷</span>
-            {images.length === 0
-              ? "Tap to upload photos"
-              : `${images.length} photo(s) selected – tap to add more`}
-          </button>
-
-          {images.length > 0 && (
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mt-3">
-              {images.map((img, idx) => (
-                // biome-ignore lint/suspicious/noArrayIndexKey: preview list
-                <div key={idx} className="relative group">
-                  <img
-                    src={img.preview}
-                    alt={`Preview ${idx + 1}`}
-                    className="w-full aspect-square object-cover rounded-lg border-2 border-beige"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveImage(idx)}
-                    className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
-                    aria-label={`Remove image ${idx + 1}`}
-                    data-ocid={`design.delete_button.${idx + 1}`}
-                  >
-                    ×
-                  </button>
-                  {img.loading && (
-                    <div className="absolute inset-0 bg-white/70 rounded-lg flex items-center justify-center">
-                      <span className="text-xs text-brown-mid">
-                        Uploading...
-                      </span>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-
-          <p className="text-sm text-brown-mid mt-3 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-            📱 If not uploading, you can send images on WhatsApp after
-            submission
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+  const whatsappUrl = `https://wa.me/919799341917?text=${whatsappMsg}`;
 
   return (
-    <>
-      {/* Success Modal */}
-      {showSuccessModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
-          data-ocid="design.modal"
-        >
-          <div className="bg-white rounded-2xl shadow-xl p-8 max-w-sm w-full text-center">
-            <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
-              <span className="text-3xl text-gold">✓</span>
-            </div>
-            <h3 className="font-heading text-2xl font-bold text-brown-deep mb-2">
-              Thank you!
-            </h3>
-            <p className="text-brown-mid mb-6">
-              We will contact you shortly on your WhatsApp.
-            </p>
-            <button
-              type="button"
-              onClick={() => setShowSuccessModal(false)}
-              className="bg-gold text-brown-deep font-bold py-3 px-8 rounded-full hover:bg-gold-dark transition-colors w-full"
-              data-ocid="design.close_button"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-
-      <section
-        id="design"
-        className="py-20 bg-beige"
-        data-ocid="design.section"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <p className="text-gold font-medium tracking-widest uppercase text-sm mb-3">
-              Custom Order
-            </p>
-            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-brown-deep mb-4">
-              Get Your Custom Furniture Quote in 10 Minutes
-            </h2>
-            <p className="text-brown-mid text-base sm:text-lg max-w-xl mx-auto">
-              Direct from manufacturer &bull; Best price &bull; Free
-              consultation
-            </p>
-          </div>
-
-          <div className="bg-white rounded-3xl shadow-xl p-6 md:p-10 max-w-3xl mx-auto">
-            {/* Step indicator text */}
-            <p
-              className="text-center text-sm font-semibold text-brown-mid mb-4"
-              data-ocid="design.panel"
-            >
-              Step {step} of {WIZARD_STEPS.length}
-            </p>
-
-            {/* Progress dots */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-3">
-                {WIZARD_STEPS.map((label, idx) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: static step list
-                  <div key={idx} className="flex flex-col items-center flex-1">
-                    <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
-                        step > idx + 1
-                          ? "bg-gold text-brown-deep"
-                          : step === idx + 1
-                            ? "bg-brown-deep text-cream ring-2 ring-brown-deep ring-offset-2"
-                            : "bg-beige text-brown-mid/50"
-                      }`}
-                    >
-                      {step > idx + 1 ? "\u2713" : idx + 1}
-                    </div>
-                    <span className="text-xs mt-1 text-center text-brown-mid hidden sm:block leading-tight max-w-[70px]">
-                      {label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <div className="relative h-1.5 bg-beige rounded-full">
-                <div
-                  className="absolute left-0 top-0 h-full bg-gold rounded-full transition-all duration-500"
-                  style={{
-                    width: `${((step - 1) / (WIZARD_STEPS.length - 1)) * 100}%`,
-                  }}
-                />
-              </div>
-            </div>
-
-            <div className="min-h-[300px]">
-              {step === 1 && renderStep1()}
-              {step === 2 && renderStep2()}
-              {step === 3 && renderStep3()}
-            </div>
-
-            {/* Navigation */}
-            <div className="flex items-center justify-between mt-8 pt-6 border-t border-beige">
-              {step > 1 ? (
-                <button
-                  type="button"
-                  onClick={() => setStep((s) => s - 1)}
-                  className="border-2 border-brown-mid text-brown-mid px-8 py-3 rounded-full hover:border-brown-deep hover:text-brown-deep transition-colors"
-                  data-ocid="design.back_button"
-                >
-                  \u2190 Back
-                </button>
-              ) : (
-                <div />
-              )}
-
-              {step < WIZARD_STEPS.length ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (step === 1 && !validateStep1()) return;
-                    setStep((s) => s + 1);
-                  }}
-                  className="bg-gold text-brown-deep font-bold py-3 px-8 rounded-full hover:bg-gold-dark transition-colors"
-                  data-ocid="design.next_button"
-                >
-                  Next \u2192
-                </button>
-              ) : (
-                <div className="flex flex-col items-end gap-1">
-                  <button
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={submitting || submitted}
-                    className="bg-green-600 text-white font-bold py-3 px-6 rounded-full hover:bg-green-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
-                    data-ocid="design.submit_button"
-                  >
-                    {submitting
-                      ? "Submitting..."
-                      : "\ud83d\udcac Get Free Quote on WhatsApp"}
-                  </button>
-                  <span className="text-xs text-brown-mid">
-                    \u26a1 Response within 15 minutes
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Trust badges + urgency */}
-          <div className="max-w-3xl mx-auto mt-6 space-y-3">
-            <div className="flex flex-wrap justify-center gap-4">
-              {[
-                "\u2713 500+ Happy Customers",
-                "\u2713 5+ Years Experience",
-                "\u2713 Direct Factory Pricing",
-              ].map((badge) => (
-                <span
-                  key={badge}
-                  className="bg-white border border-beige rounded-full px-4 py-2 text-sm font-semibold text-brown-deep shadow-sm"
-                >
-                  {badge}
-                </span>
-              ))}
-            </div>
-            <p className="text-center text-sm font-semibold text-amber-600">
-              \ud83d\udd25 Limited bookings today &ndash; Contact now
-            </p>
-          </div>
-        </div>
-      </section>
-    </>
-  );
-}
-
-// ── Enquiry Section ──────────────────────────────────────────────────────────
-
-function EnquirySection() {
-  const { actor } = useActor();
-  const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    city: "",
-    service: "Custom Furniture",
-    message: "",
-  });
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
-  ) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!actor) {
-      toast.error("Connection not ready. Please try again.");
-      return;
-    }
-    setLoading(true);
-    try {
-      await actor.submitEnquiry({
-        name: form.name,
-        phone: form.phone,
-        city: form.city,
-        service: form.service,
-        message: form.message,
-      });
-      toast.success("Thank you! We\u2019ll contact you soon.");
-      setForm({
-        name: "",
-        phone: "",
-        city: "",
-        service: "Custom Furniture",
-        message: "",
-      });
-    } catch {
-      toast.error("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const inputClass =
-    "w-full bg-white/10 border border-white/30 text-white placeholder-white/50 rounded-xl px-4 py-3 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors";
-
-  return (
-    <section id="enquiry" className="py-20 bg-brown-deep">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6">
+    <section id="design" className="py-20 bg-beige" data-ocid="design.section">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <p className="text-gold font-medium tracking-widest uppercase text-sm mb-3">
-            Free Estimate
+            Custom Order
           </p>
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-cream mb-4">
-            Get a Free Quote
+          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-brown-deep mb-4">
+            Get Your Custom Furniture Quote
           </h2>
-          <p className="text-cream/70 text-base">
-            Fill in your details and we&apos;ll get back to you within 24 hours
+          <p className="text-brown-mid text-base sm:text-lg max-w-xl mx-auto">
+            Direct from manufacturer &bull; Best price &bull; Free consultation
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid sm:grid-cols-2 gap-4">
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Your Full Name"
-              required
-              className={inputClass}
-              data-ocid="enquiry.name.input"
-            />
-            <input
-              type="tel"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              placeholder="Phone Number (10 digits)"
-              pattern="[0-9]{10}"
-              title="Please enter a 10-digit phone number"
-              required
-              className={inputClass}
-              data-ocid="enquiry.phone.input"
-            />
+        <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 max-w-2xl mx-auto text-center">
+          <div className="text-6xl mb-6">💬</div>
+          <h3 className="font-heading text-2xl font-bold text-brown-deep mb-3">
+            Chat with us on WhatsApp
+          </h3>
+          <p className="text-brown-mid text-base mb-8 max-w-md mx-auto">
+            Send photos, discuss your design, get an instant price quote — all
+            on WhatsApp. No forms, no delays.
+          </p>
+
+          {/* Quick reply buttons */}
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            {["Bed", "Sofa", "Table", "Chair", "Door", "Custom Work"].map(
+              (type) => {
+                const msg = encodeURIComponent(
+                  `Hi Kartik Furniture 👋\nMujhe custom furniture banwana hai.\n\nDetails:\n- Type: ${type}\n- Size: \n- Location: \n\nPhoto bhej raha hoon.`,
+                );
+                return (
+                  <a
+                    key={type}
+                    href={`https://wa.me/919799341917?text=${msg}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 border-2 border-gold text-brown-deep rounded-full text-sm font-semibold hover:bg-gold hover:text-white transition-colors"
+                  >
+                    {type}
+                  </a>
+                );
+              },
+            )}
           </div>
-          <div className="grid sm:grid-cols-2 gap-4">
-            <input
-              type="text"
-              name="city"
-              value={form.city}
-              onChange={handleChange}
-              placeholder="Your City"
-              required
-              className={inputClass}
-              data-ocid="enquiry.city.input"
-            />
-            <select
-              name="service"
-              value={form.service}
-              onChange={handleChange}
-              required
-              className={`${inputClass} bg-brown-mid/80`}
-              data-ocid="enquiry.service.select"
-            >
-              <option value="Custom Furniture">Custom Furniture</option>
-              <option value="Wooden Doors">Wooden Doors</option>
-              <option value="Plywood Work">Plywood Work</option>
-              <option value="Furniture Repair">Furniture Repair</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <textarea
-            name="message"
-            value={form.message}
-            onChange={handleChange}
-            placeholder="Tell us about your requirement (dimensions, style, etc.)"
-            rows={4}
-            className={`${inputClass} resize-none`}
-            data-ocid="enquiry.message.textarea"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-gold text-brown-deep font-bold text-lg py-4 rounded-full hover:bg-gold-dark transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-lg mt-2"
-            data-ocid="enquiry.submit_button"
+
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-3 bg-[#25D366] text-white font-bold text-lg py-4 px-10 rounded-full shadow-lg hover:bg-[#1ebe5a] transition-colors w-full sm:w-auto"
+            data-ocid="design.whatsapp.button"
           >
-            {loading ? "Sending..." : "Send Enquiry \u2192"}
-          </button>
-        </form>
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="w-6 h-6"
+              aria-label="WhatsApp"
+              role="img"
+            >
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+            Get Free Quote on WhatsApp
+          </a>
+
+          <p className="text-sm text-brown-mid mt-4">
+            ⚡ Response within 15 minutes
+          </p>
+
+          {/* Trust badges */}
+          <div className="flex flex-wrap justify-center gap-6 mt-8 pt-8 border-t border-beige">
+            {[
+              { icon: "🏆", text: "500+ Happy Customers" },
+              { icon: "⭐", text: "5+ Years Experience" },
+              { icon: "🏭", text: "Direct Factory Pricing" },
+            ].map((b) => (
+              <div
+                key={b.text}
+                className="flex items-center gap-2 text-sm font-semibold text-brown-deep"
+              >
+                <span>{b.icon}</span>
+                <span>{b.text}</span>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-xs text-red-600 font-semibold mt-4">
+            🔥 Limited bookings today – Contact now
+          </p>
+        </div>
       </div>
     </section>
   );
 }
-
 // ── Contact Section ──────────────────────────────────────────────────────────
 
 function ContactSection() {
@@ -2148,12 +1519,12 @@ export default function Home() {
         <TestimonialsSection />
         <BlogSection />
         <DesignWizardSection />
-        <EnquirySection />
         <ContactSection />
       </main>
       <Footer />
       <FloatingWhatsApp />
       <FloatingCallButton />
+      <AIChatbot />
     </div>
   );
 }

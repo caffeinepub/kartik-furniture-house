@@ -1,0 +1,27 @@
+{
+  "name": "Kartik Furniture House",
+  "short_name": "Kartik Furniture",
+  "description": "Custom furniture manufacturer in Nagar, Bharatpur, Rajasthan. Direct factory price.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#4E342E",
+  "theme_color": "#4E342E",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/assets/generated/kartik-pwa-icon.dim_512x512.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/generated/kartik-pwa-icon.dim_512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "lifestyle"],
+  "lang": "hi",
+  "dir": "ltr"
+}

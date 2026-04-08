@@ -89,6 +89,50 @@ export class ExternalBlob {
         return this;
     }
 }
+export interface http_request_result {
+    status: bigint;
+    body: Uint8Array;
+    headers: Array<http_header>;
+}
+export interface TransformationOutput {
+    status: bigint;
+    body: Uint8Array;
+    headers: Array<http_header>;
+}
+export interface TransformationInput {
+    context: Uint8Array;
+    response: http_request_result;
+}
+export interface DesignRequestSubmission {
+    imageURLs: Array<string>;
+    furnitureType: string;
+    city: string;
+    name: string;
+    color: string;
+    description: string;
+    dimensionLength: string;
+    dimensionWidth: string;
+    phone: string;
+    budget: string;
+    dimensionHeight: string;
+    material: string;
+}
+export interface DesignRequest {
+    status: string;
+    imageURLs: Array<string>;
+    furnitureType: string;
+    city: string;
+    name: string;
+    color: string;
+    description: string;
+    dimensionLength: string;
+    timestamp: bigint;
+    dimensionWidth: string;
+    phone: string;
+    budget: string;
+    dimensionHeight: string;
+    material: string;
+}
 export interface EnquirySubmission {
     service: string;
     city: string;
@@ -107,37 +151,48 @@ export interface Enquiry {
 export interface UserProfile {
     name: string;
 }
+export interface http_header {
+    value: string;
+    name: string;
+}
 export enum UserRole {
     admin = "admin",
     user = "user",
     guest = "guest"
 }
 export interface backendInterface {
-    _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
+    _initializeAccessControl(): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    chatWithAI(userMessage: string): Promise<string>;
+    deleteDesignRequest(id: bigint): Promise<void>;
     deleteEnquiry(id: bigint): Promise<void>;
     getAllEnquiries(): Promise<Array<Enquiry>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
+    getChatbotSystemInfo(): Promise<string>;
+    getDesignRequests(): Promise<Array<DesignRequest>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     isCallerAdmin(): Promise<boolean>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
+    submitDesignRequest(submission: DesignRequestSubmission): Promise<bigint>;
     submitEnquiry(submission: EnquirySubmission): Promise<bigint>;
+    transformChatResponse(input: TransformationInput): Promise<TransformationOutput>;
+    updateDesignRequestStatus(id: bigint, status: string): Promise<void>;
 }
 import type { UserProfile as _UserProfile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
-    async _initializeAccessControlWithSecret(arg0: string): Promise<void> {
+    async _initializeAccessControl(): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor._initializeAccessControlWithSecret(arg0);
+                const result = await this.actor._initializeAccessControl();
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor._initializeAccessControlWithSecret(arg0);
+            const result = await this.actor._initializeAccessControl();
             return result;
         }
     }
@@ -152,6 +207,34 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+            return result;
+        }
+    }
+    async chatWithAI(arg0: string): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.chatWithAI(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.chatWithAI(arg0);
+            return result;
+        }
+    }
+    async deleteDesignRequest(arg0: bigint): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deleteDesignRequest(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deleteDesignRequest(arg0);
             return result;
         }
     }
@@ -211,6 +294,34 @@ export class Backend implements backendInterface {
             return from_candid_UserRole_n4(this._uploadFile, this._downloadFile, result);
         }
     }
+    async getChatbotSystemInfo(): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getChatbotSystemInfo();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getChatbotSystemInfo();
+            return result;
+        }
+    }
+    async getDesignRequests(): Promise<Array<DesignRequest>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getDesignRequests();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getDesignRequests();
+            return result;
+        }
+    }
     async getUserProfile(arg0: Principal): Promise<UserProfile | null> {
         if (this.processError) {
             try {
@@ -253,6 +364,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async submitDesignRequest(arg0: DesignRequestSubmission): Promise<bigint> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.submitDesignRequest(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.submitDesignRequest(arg0);
+            return result;
+        }
+    }
     async submitEnquiry(arg0: EnquirySubmission): Promise<bigint> {
         if (this.processError) {
             try {
@@ -264,6 +389,34 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.submitEnquiry(arg0);
+            return result;
+        }
+    }
+    async transformChatResponse(arg0: TransformationInput): Promise<TransformationOutput> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.transformChatResponse(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.transformChatResponse(arg0);
+            return result;
+        }
+    }
+    async updateDesignRequestStatus(arg0: bigint, arg1: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateDesignRequestStatus(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateDesignRequestStatus(arg0, arg1);
             return result;
         }
     }
